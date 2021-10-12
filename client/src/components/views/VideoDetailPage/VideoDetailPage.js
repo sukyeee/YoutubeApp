@@ -3,6 +3,7 @@ import { List, Avatar, Row, Col, Button } from 'antd';
 import axios from 'axios';
 import SideVideo from './Sections/SideVideo';
 import Subscriber from './Sections/Subscriber';
+import LikeDislike from './Sections/LikeDislike';
 // import Comments from './Sections/Comments'
 // import LikeDislikes from './Sections/LikeDislikes';
 
@@ -55,7 +56,7 @@ function VideoDetailPage(props) {
                         <video style={{ width: '100%' }} src={`http://localhost:5000/${Video.filePath}`} controls></video>
 
                         <List.Item
-                            actions = {[<Subscriber userTo={Video.writer._id} userFrom={localStorage.getItem('userId')}>subscriber</Subscriber>]} 
+                            actions = {[<Subscriber userTo={Video.writer._id} userFrom={localStorage.getItem('userId')}>subscriber</Subscriber>], [<LikeDislike userFrom={localStorage.getItem('userId')} videoId={videoId} />]} 
                             // actions={[<LikeDislikes video videoId={videoId} userId={localStorage.getItem('userId')}  />, <Subscriber userTo={Video.writer._id} userFrom={localStorage.getItem('userId')} />]}
                         >
                             <List.Item.Meta
