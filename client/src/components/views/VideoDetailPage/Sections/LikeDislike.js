@@ -9,16 +9,32 @@ function LikeDislike(props) {
     const [disLikeNumber, setDisLikeNumber] = useState(0)
     const [disliked, setDisliked] = useState(false)
 
-    const Variable = {
+    let Variable = {
         userFrom:props.userFrom,
         videoId:props.videoId
     }
 
+    let variable = {}
+    if(props.commentId){
+        Variable = {
+            userFrom:props.userFrom,
+            commentId:props.commentId
+        }
+         variable = {
+            commentId:props.commentId
+        }  
+    } else {
+         variable = {
+            videoId:props.videoId
+        }
+    }
     useEffect(() => {
+
+       
         
       
         //liked 여부와 likenumber, dislike 여부와 dislikenumber 가져오기
-        Axios.post('/api/likeDislike/getlikeNumber', {videoId:props.videoId})
+        Axios.post('/api/likeDislike/getlikeNumber', variable)
             .then(response => {
                 if(response.data.success){
                     console.log('...',response.data.number)
@@ -33,7 +49,7 @@ function LikeDislike(props) {
             } else alert('getliked 가져오는데 실패')
         })
 
-        Axios.post('/api/likeDislike/getDislikeNumber', {videoId:props.videoId})
+        Axios.post('/api/likeDislike/getDislikeNumber', variable)
         .then(response => {
             if(response.data.success){
                 console.log('...',response.data.number)
@@ -47,7 +63,6 @@ function LikeDislike(props) {
                 setDisliked(response.data.result)
             } else alert('getliked 가져오는데 실패')
         })
-
 
      
     }, [])
