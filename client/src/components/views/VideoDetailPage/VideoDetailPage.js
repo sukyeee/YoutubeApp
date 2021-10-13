@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { List, Avatar, Row, Col, Button } from 'antd';
-import axios from 'axios';
+import Axios from 'axios';
 import SideVideo from './Sections/SideVideo';
 import Subscriber from './Sections/Subscriber';
 import LikeDislike from './Sections/LikeDislike';
-// import Comments from './Sections/Comments'
-// import LikeDislikes from './Sections/LikeDislikes';
+import Comments from './Sections/Comments'
 
 
 function VideoDetailPage(props) {
 
-
+    const userId = localStorage.getItem('userId')
     const videoId = props.match.params.videoId
     const [Video, setVideo] = useState([])
     const [CommentLists, setCommentLists] = useState([])
@@ -18,9 +17,28 @@ function VideoDetailPage(props) {
     const videoVariable = {
         videoId: videoId
     }
-
+    const Variable = {
+        videoId: videoId,
+        userId: userId
+    }
+    const refreshFunction = (newComment) => {
+        setCommentLists(CommentLists.concat(newComment) )
+    }
     useEffect(() => {
-        axios.post('/api/video/getVideoDetail', videoVariable)
+
+        Axios.post('/api/comment/getComments', Variable)
+        .then(response => {
+            if(response.data.success){
+                setCommentLists(response.data.comments)
+                console.log('comments',response.data.comments)
+
+            } else {
+                alert('getComments 받아오는데 실패')
+            }
+        })
+
+
+        Axios.post('/api/video/getVideoDetail', videoVariable)
             .then(response => {
                 if (response.data.success) {
                     console.log(response.data.detail)
@@ -30,22 +48,12 @@ function VideoDetailPage(props) {
                 }
             })
 
-        // axios.post('/api/comment/getComments', videoVariable)
-        //     .then(response => {
-        //         if (response.data.success) {
-        //             console.log('response.data.comments',response.data.comments)
-        //             setCommentLists(response.data.comments)
-        //         } else {
-        //             alert('Failed to get video Info')
-        //         }
-        //     })
+       
 
 
     }, [])
 
-    // const updateComment = (newComment) => {
-    //     setCommentLists(CommentLists.concat(newComment))
-    // }
+    
 
 
     if (Video.writer) {
@@ -67,7 +75,7 @@ function VideoDetailPage(props) {
                             <div></div>
                         </List.Item>
 
-                        {/* <Comments CommentLists={CommentLists} postId={Video._id} refreshFunction={updateComment} /> */}
+                        <Comments videoId={videoId} CommentLists={CommentLists} userId={userId} refreshFunction={refreshFunction} />
 
                     </div>
                 </Col>
