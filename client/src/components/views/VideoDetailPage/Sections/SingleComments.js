@@ -38,8 +38,8 @@ function SingleComments(props) {
     }
 
    const actions = [
-       <span onClick={OpenReplybutton}>Reply to</span>,
-    <LikeDislike userFrom={localStorage.getItem('userId')} videoId={props.videoId} commentId={props.comment._id}/>
+    <LikeDislike userFrom={localStorage.getItem('userId')} videoId={props.videoId} commentId={props.comment._id}/>,
+    <span onClick={OpenReplybutton}>Reply to</span>
    ]
 
     return (
@@ -48,7 +48,7 @@ function SingleComments(props) {
             <Comment
                 actions = {actions}
                 author = {props.comment.writer.name}
-                avatar = {<Avatar img={props.comment.writer.image} alt />}
+                avatar = {<Avatar img={props.comment.writer.image} alt="image" />}
                 content = {props.comment.content}
 
             />
