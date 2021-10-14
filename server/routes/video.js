@@ -106,9 +106,20 @@ router.post("/getVideoDetail", (req, res) => {
             if(err) return res.status(400).send(err);
             res.status(200).json({ success: true, detail })
         })
+        
 
 });
 
+router.post("/deleteVideo", (req, res) => {
+
+    Video.findOneAndDelete({"_id": req.body.videoId}, ((err, video) => {
+        if(err) return res.status(400).send(err);
+        res.status(200).json({ success: true, video })
+    }))
+       
+        
+
+});
 
 
 module.exports = router;

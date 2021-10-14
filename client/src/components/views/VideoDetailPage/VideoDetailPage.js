@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { List, Avatar, Row, Col, Button } from 'antd';
+import { List, Avatar, Row, Col, Button, Icon, Dropdown, Menu ,message} from 'antd';
 import Axios from 'axios';
 import SideVideo from './Sections/SideVideo';
 import Subscriber from './Sections/Subscriber';
 import LikeDislike from './Sections/LikeDislike';
 import Comments from './Sections/Comments'
+import { DownOutlined, UserOutlined } from '@ant-design/icons';
+import VideoMenu from './Sections/VideoMenu';
 
 
 function VideoDetailPage(props) {
@@ -53,28 +55,32 @@ function VideoDetailPage(props) {
 
     }, [])
 
+   
     
-
+      
 
     if (Video.writer) {
         return (
             <Row>
                 <Col lg={18} xs={24}>
                     <div className="postPage" style={{ width: '100%', padding: '3rem 4em' }}>
+                   <VideoMenu videoId={videoId} history={props.history} />
+                   
+  
                         <video style={{ width: '100%' }} src={`http://localhost:5000/${Video.filePath}`} controls></video>
 
                         <List.Item
-                            actions = {[<Subscriber userTo={Video.writer._id} userFrom={localStorage.getItem('userId')}>subscriber</Subscriber>], [<LikeDislike userFrom={localStorage.getItem('userId')} videoId={videoId} />]} 
-                            // actions={[<LikeDislikes video videoId={videoId} userId={localStorage.getItem('userId')}  />, <Subscriber userTo={Video.writer._id} userFrom={localStorage.getItem('userId')} />]}
+                            actions = {[<Subscriber userTo={Video.writer._id} userFrom={localStorage.getItem('userId')}>subscriber</Subscriber>],
+                                    [<LikeDislike userFrom={localStorage.getItem('userId')} videoId={videoId} />]} 
                         >
                             <List.Item.Meta
                                 avatar={<Avatar src={Video.writer && Video.writer.image} />}
                                 title={<a href="https://ant.design">{Video.title}</a>}
                                 description={Video.description}
                             />
-                            <div></div>
-                        </List.Item>
 
+                        </List.Item>
+                        <br />
                         <Comments videoId={videoId} CommentLists={CommentLists} userId={userId} refreshFunction={refreshFunction} />
 
                     </div>
