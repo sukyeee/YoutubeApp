@@ -163,7 +163,7 @@ function EditVideo(props) {
                 </div>
                 <br/>
                 <div>
-                        <select onChange={onPrivateChange} value={Video.privacy}  >
+                        <select onChange={onPrivateChange} value={Private}  >
                             {
                                 PrivateOption.map((item, index) => (
                                     
@@ -175,7 +175,7 @@ function EditVideo(props) {
                             }
                         
                         </select> <br/><br/>
-                        <select onChange={onCategoryChange} value={Video.category} >
+                        <select onChange={onCategoryChange} value={Category} >
                             {
                             CategoryOption.map((item, index)=> (
                                 // CategoryOption[Video.category].label 에 selected항목 추가하는 대신 select옵션에 value값 주기
