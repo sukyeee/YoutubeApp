@@ -121,5 +121,21 @@ router.post("/deleteVideo", (req, res) => {
 
 });
 
+router.post("/editVideo", (req, res) => {
+
+    Video.findOneAndUpdate({"_id": req.body.videoId},
+    {"title" : req.body.title, "description" : req.body.description, 
+    "privacy" : req.body.private, "category" : req.body.category},
+     ((err, video) => {
+        if(err) return res.status(400).json({success:false});
+        res.status(200).json({ success: true, video })
+
+      
+        
+    }))
+        
+
+});
+
 
 module.exports = router;

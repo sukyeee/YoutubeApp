@@ -1,6 +1,6 @@
 import { Button, Form, Icon, Input, message, Select, Typography } from 'antd'
 import Axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Dropzone from 'react-dropzone'
 import { useSelector } from 'react-redux';
 
@@ -19,18 +19,24 @@ const CategoryOption = [
     {value: 3, label: "Pets & Animals"},
 ]
 
+function EditVideo(props) {
 
-
-function VideoUploadPage(props) {
-    const user = useSelector(state => state.user)
-    const [VideoTitle, setVideoTitle] = useState("")
-    const [Description, setDescription] = useState("")
-    const [Private, setPrivate] = useState(0)
-    const [Category, setCategory] = useState(0)
+    const Video = props.location.state.Video
+    console.log(CategoryOption[Video.category].label)
+    
+    const [VideoTitle, setVideoTitle] = useState(Video.title)
+    const [Description, setDescription] = useState(Video.description)
+    const [Private, setPrivate] = useState(Video.privacy)
+    const [Category, setCategory] = useState(Video.category)
 
     const [FilePath, setFilePath] = useState("")
     const [Thumbnail, setThumbnail] = useState("")
     const [Duration, setDuration] = useState("")
+
+    useEffect(() => {
+    //     setPrivate(PrivateOption[Video.privacy].value)
+    //    setCategory(CategoryOption[Video.category].value)
+    }, [])
 
     const onTitleChange = (e) => {
         setVideoTitle(e.target.value)
@@ -52,71 +58,57 @@ function VideoUploadPage(props) {
         formData.append("file",files[0])
         console.log(files)
     
-        Axios.post('/api/video/uploadfiles', formData, config)
-                .then(response => {
-                    if (response.data.success) {
+        // Axios.post('/api/video/uploadfiles', formData, config)
+        //         .then(response => {
+        //             if (response.data.success) {
     
-                        let variable = {
-                            url: response.data.url,
-                            fileName: response.data.fileName
-                        }
-                        console.log(response.data)
-                        setFilePath(response.data.url)
+        //                 let variable = {
+        //                     url: response.data.url,
+        //                     fileName: response.data.fileName
+        //                 }
+        //                 console.log(response.data)
+        //                 setFilePath(response.data.url)
     
-                        //gerenate thumbnail with this filepath ! 
+        //                 //gerenate thumbnail with this filepath ! 
     
-                        Axios.post('/api/video/thumbnail', variable)
-                            .then(response => {
-                                if (response.data.success) {
-                                    setDuration(response.data.fileDuration)
-                                    setThumbnail(response.data.url)
-                                } else {
-                                    alert('Failed to make the thumbnails');
-                                }
-                            })
+        //                 Axios.post('/api/video/thumbnail', variable)
+        //                     .then(response => {
+        //                         if (response.data.success) {
+        //                             setDuration(response.data.fileDuration)
+        //                             setThumbnail(response.data.url)
+        //                         } else {
+        //                             alert('Failed to make the thumbnails');
+        //                         }
+        //                     })
     
     
-                    } else {
-                        alert('failed to save the video in server')
-                    }
-                })
+        //             } else {
+        //                 alert('failed to save the video in server')
+        //             }
+        //         })
     }
 
-    const onSubmit = (event) => {
+    const onEdit = (event) => {
 
         event.preventDefault();
 
-        // if (user.userData && !user.userData.isAuth) {
-        //     return alert('Please Log in First')
-        // }
-
-        // if (title === "" || Description === "" ||
-        //     Categories === "" || FilePath === "" ||
-        //     Duration === "" || Thumbnail === "") {
-        //     return alert('Please first fill all the fields')
-        // }
-
         const variables = {
-            writer: user.userData._id,
+            videoId : Video._id,
             title: VideoTitle,
             description: Description,
             privacy: Private,
-            filePath: FilePath,
-            category: Category,
-            duration: Duration,
-            thumbnail: Thumbnail
+            category: Category
         }
 
-        Axios.post('/api/video/uploadVideo', variables)
-            .then(response => {
-                if (response.data.success) {
-                    alert('video Uploaded Successfully')
-                    props.history.push('/')
-                } else {
-                    alert('Failed to upload video')
-                }
-            })
-
+        Axios.post('/api/video/editVideo', variables)
+          .then(response => {
+              if(response.data.success){
+                console.log(response.data.video)
+                alert('수정이 완료되었습니다')
+                props.history.push('/');
+              }else alert('editVideo 실패')
+          })
+            
     }
 
 
@@ -127,7 +119,7 @@ function VideoUploadPage(props) {
             </div>
             
 
-                <Form onSubmit={onSubmit}>
+                <Form onSubmit={onEdit}>
                 <div style={{display:'flex', justifyContent:'space-between'}}>
                     <Dropzone
                     onDrop={onDrop}
@@ -143,9 +135,9 @@ function VideoUploadPage(props) {
                     )}
                     </Dropzone>
                   {/* thumnail */}
-                  {Thumbnail !== "" &&
+                  {Video.thumbnail !== "" &&
                         <div>
-                            <img src={`http://localhost:5000/${Thumbnail}`} alt="haha" />
+                            <img src={`http://localhost:5000/${Video.thumbnail}`} alt="haha" />
                         </div>
                     }
 
@@ -158,38 +150,50 @@ function VideoUploadPage(props) {
                     <Input 
                         onChange={onTitleChange}
                         value={VideoTitle}
+                        placeholder={Video.title}
                     />
                     <Title level={4}>Description</Title>
                     <TextArea 
                         onChange={onDescriptionChange}
                         value={Description}
+                        placeholder={Video.description}
                     
                     />
                     
                 </div>
                 <br/>
                 <div>
-                        <select onChange={onPrivateChange}>
+                        <select onChange={onPrivateChange} value={Video.privacy}  >
                             {
                                 PrivateOption.map((item, index) => (
-                                <option key={index} value={item.value}>{item.label}</option> 
+                                    
+                                        <option key={index} value={item.value} >{item.label}</option> 
+                                
+                                    
                                 ))
+                                
                             }
                         
                         </select> <br/><br/>
-                        <select onChange={onCategoryChange}>
+                        <select onChange={onCategoryChange} value={Video.category} >
                             {
                             CategoryOption.map((item, index)=> (
-                              <option key={index} value={item.value}>{item.label}</option>
+                                // CategoryOption[Video.category].label 에 selected항목 추가하는 대신 select옵션에 value값 주기
+                               
+                                 <option key={index} value={item.value} >{item.label}</option>
+                                
                             ))
+                            
+                            
                             }
+                         
                         </select> <br/><br/>
                 </div>
-                <Button onClick={onSubmit}>Submit</Button>
+                <Button onClick={onEdit}>Edit</Button>
 
            
         </div>
     )
 }
 
-export default VideoUploadPage
+export default EditVideo

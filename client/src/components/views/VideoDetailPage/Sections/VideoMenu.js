@@ -3,7 +3,6 @@ import {Menu, Icon, Dropdown, Button} from 'antd'
 import Axios from 'axios';
 
 function VideoMenu(props) {
-
     useEffect(() => {
         console.log('history', props.history)
 
@@ -20,13 +19,20 @@ function VideoMenu(props) {
             })
     }
 
+    const onClickEdit = () => {
+        
+        props.history.push({pathname:`/video/${props.videoId}/edit` , state:{Video:props.Video} });
+
+    }
+
+
     const menu = (
         <Menu>
           <Menu.Item key="1" >
-            Delete <Icon type="close" style={{color:'red'}} onClick={onClickDelete}></Icon>
+            <span>Delete</span><Icon type="close" style={{color:'red',}} onClick={onClickDelete}></Icon>
           </Menu.Item>
           <Menu.Item key="2" >
-            Edit
+            <span>Edit </span><Icon type="edit" style={{color:'blue',}} onClick={onClickEdit}></Icon>
           </Menu.Item>
          
         </Menu>
@@ -35,11 +41,13 @@ function VideoMenu(props) {
 
     return (
         <div>
-             <Dropdown overlay={menu}>
+            <div style={{marginBottom:'0.5rem', display:'flex', justifyContent:'right'}}>
+             <Dropdown overlay={menu} >
                     <Button>
                      <Icon type="more"></Icon>
                     </Button>
                      </Dropdown>
+            </div>
         </div>
     )
 }
