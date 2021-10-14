@@ -43,7 +43,7 @@ function VideoDetailPage(props) {
         Axios.post('/api/video/getVideoDetail', videoVariable)
             .then(response => {
                 if (response.data.success) {
-                    console.log(response.data.detail)
+                    console.log('videoDetail',response.data.detail)
                     setVideo(response.data.detail)
                 } else {
                     alert('Failed to get video Info')

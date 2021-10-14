@@ -21,7 +21,9 @@ const videoSchema = mongoose.Schema({
     filePath : {
         type: String,
     },
-    category: {type:Number},
+    category: {
+        type:Number
+    },
     views : {
         type: Number,
         default: 0 
