@@ -17,6 +17,9 @@ const CategoryOption = [
     {value: 1, label: "Autos & Vehicles"},
     {value: 2, label: "Music"},
     {value: 3, label: "Pets & Animals"},
+    {value: 4, label: "Study"},
+    {value: 5, label: "GrandChase"},
+    {value: 6, label: "etc"},
 ]
 
 function EditVideo(props) {

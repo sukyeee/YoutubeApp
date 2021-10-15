@@ -136,6 +136,15 @@ router.post("/editVideo", (req, res) => {
         
 
 });
+router.post("/getCategoryVideo", (req, res) => {
 
+    Video.find({'category': req.body.category})
+        .populate('writer')
+        .exec((err, videos) => {
+            if(err) return res.status(400).send(err);
+            res.status(200).json({ success: true, videos })
+        })
+
+});
 
 module.exports = router;
