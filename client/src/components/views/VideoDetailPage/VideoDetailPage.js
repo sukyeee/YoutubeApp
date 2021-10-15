@@ -64,7 +64,7 @@ function VideoDetailPage(props) {
             <Row>
                 <Col lg={18} xs={24}>
                     <div className="postPage" style={{ width: '100%', padding: '3rem 4em' }}>
-                   <VideoMenu videoId={videoId} history={props.history} Video={Video} />
+                   <VideoMenu videoId={videoId} history={props.history} Video={Video} userId={userId} />
                    
   
                         <video style={{ width: '100%' }} src={`http://localhost:5000/${Video.filePath}`} controls></video>

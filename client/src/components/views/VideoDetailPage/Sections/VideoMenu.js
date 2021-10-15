@@ -41,6 +41,8 @@ function VideoMenu(props) {
 
     return (
         <div>
+            {
+            (props.userId === props.Video.writer._id) ?
             <div style={{marginBottom:'0.5rem', display:'flex', justifyContent:'right'}}>
              <Dropdown overlay={menu} >
                     <Button>
@@ -48,6 +50,8 @@ function VideoMenu(props) {
                     </Button>
                      </Dropdown>
             </div>
+            : ""
+            }
         </div>
     )
 }
