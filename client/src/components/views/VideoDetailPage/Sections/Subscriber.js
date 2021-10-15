@@ -68,24 +68,18 @@ function Subscriber(props) {
           }
     }
 
-    //Movie.writer == userId같으면 구독버튼 보이지않게
-    {if (props.userTo != props.userFrom ){
+    //Movie.writer == userTo같으면 구독버튼 보이지않게
+    
+       
         return (
-            
             <div>
-                <Button onClick={onClickSubscriber}> {SubscribeNumber} {Subscribed? 'Subscribed' : 'Subscribe'}</Button>
+            {  (props.userFrom != props.userTo )?
+                <Button onClick={onClickSubscriber} style={{'backgroundColor' : (Subscribed ? "red" : "" )}}> {SubscribeNumber} {Subscribed? 'Subscribed' : 'Subscribe'}</Button>
+                : "" 
+            }
             </div>
         )
-    }
-    else {
-        return (
-            
-            <div>
-                
-            </div>
-        )
-    }
-    }
+    
     
 }
 
